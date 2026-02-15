@@ -18,7 +18,7 @@ def build_lookup_table(items,
                        key_field,
                        price_field):
     """
-    Docstring for build_lookup_table
+    Build a lookup table mapping product names to their prices.
     """
     lookup = {}
     for item in items:
