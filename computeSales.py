@@ -52,6 +52,14 @@ def compute_total(sales_list, lookup_list, product, quantity):
             continue
 
     return total_sale
+
+def build_output(total_sale, time):
+    """Build output text"""
+    lines = []
+    lines.append(f"Total sale: {total_sale:.2f}")
+    lines.append(f"ElapsedTimeSeconds\t{time}")
+    return "\n".join(lines)
+
 def main():
     """
     Main entry point
@@ -74,10 +82,15 @@ def main():
                           price_lookup,product= "Product",
                           quantity= "Quantity")
     
-    print(total)
-    
     elapsed_time = time.perf_counter() - start_timer #End of time counter
-    print(elapsed_time)
+    
+    output_text = build_output(total, elapsed_time)
+    print(output_text)
+
+    with open(f"SalesResult_{args.salesRecord}.txt",
+               "w",
+               encoding="utf-8") as out_file:
+        out_file.write(output_text)
 
 if __name__ == "__main__":
     main()
