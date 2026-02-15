@@ -26,9 +26,32 @@ def build_lookup_table (items,
             print(f"Missing '{key_field}' in an item: {item}")
         if item_price is None:
             print(f"Missing '{price_field}' in an item: {item}")
-        lookup[item_name] = float(price_field)
+        lookup[item_name] = float(item_price)
     return lookup
 
+def compute_total(sales_list, lookup_list, product, quantity):
+    """
+    Returns the total of the sale and a list of items missing in the
+    cataloge.
+    """
+    total_sale = 0.0
+
+    for row in sales_list:
+        try:
+            product = row["Product"]
+            quantity = row["Quantity"]
+
+            if product not in lookup_list:
+                print(f"Error: Product '{product}' not found in price catalogue")
+                continue
+
+            total_sale += quantity * lookup_list[product]
+
+        except (KeyError, TypeError) as error:
+            print(f"Invalid sale record {row}: {error}")
+            continue
+
+    return total_sale
 def main():
     """
     Main entry point
@@ -41,13 +64,18 @@ def main():
     args = parser.parse_args()
     
     start_timer = time.perf_counter()  #Starting time elapsed timer
-    cataloge = load_json(args.price)
+    cataloge = load_json(args.priceCataloge)
     sales = load_json(args.salesRecord)
-
-    build_lookup_table(cataloge,
+    price_lookup = build_lookup_table(cataloge,
                        key_field= "title",
                        price_field= "price")
-
+    
+    total = compute_total(sales,
+                          price_lookup,product= "Product",
+                          quantity= "Quantity")
+    
+    print(total)
+    
     elapsed_time = time.perf_counter() - start_timer #End of time counter
     print(elapsed_time)
 
