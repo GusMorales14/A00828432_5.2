@@ -3,6 +3,31 @@
 for all sales included in"""
 import argparse
 import time
+import json
+from pathlib import Path
+
+def load_json(path: str):
+    """Load a JSON file and return the parsed object."""
+    file_path = Path(path)
+    with file_path.open("r", encoding="utf-8") as f:
+        return json.load(f)
+
+def build_lookup_table (items,
+                        key_field,
+                        price_field):
+    """
+    Docstring for build_lookup_table
+    """
+    lookup = {}
+    for item in items:
+        item_name = item.get(key_field)
+        item_price = item.get(price_field)
+        if item_name is None:
+            print(f"Missing '{key_field}' in an item: {item}")
+        if item_price is None:
+            print(f"Missing '{price_field}' in an item: {item}")
+        lookup[item_name] = float(price_field)
+    return lookup
 
 def main():
     """
@@ -13,8 +38,18 @@ def main():
                         help= " JSON catalogue of prices of products")
     parser.add_argument("salesRecord",
                         help= "JSON record for all sales in a company")
+    args = parser.parse_args()
+    
+    start_timer = time.perf_counter()  #Starting time elapsed timer
+    cataloge = load_json(args.price)
+    sales = load_json(args.salesRecord)
 
-    start_timer = time.perf_counter()
+    build_lookup_table(cataloge,
+                       key_field= "title",
+                       price_field= "price")
+
+    elapsed_time = time.perf_counter() - start_timer #End of time counter
+    print(elapsed_time)
 
 if __name__ == "__main__":
     main()
