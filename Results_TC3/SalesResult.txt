@@ -1,0 +1,2 @@
+Total sale: 165235.37
+ElapsedTimeSeconds	0.013419800001429394
