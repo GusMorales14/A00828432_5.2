@@ -1,3 +1,6 @@
+# pylint: disable=invalid-name
+"""Compute the total cost 
+for all sales included in"""
 import argparse
 import time
 
@@ -12,5 +15,6 @@ def main():
                         help= "JSON record for all sales in a company")
 
     start_timer = time.perf_counter()
+
 if __name__ == "__main__":
     main()
