@@ -97,7 +97,7 @@ def main():
     output_text = build_output(total, elapsed_time)
     print(output_text)
 
-    with open(f"SalesResult.txt",
+    with open("SalesResult.txt",
               "w", encoding="utf-8") as out_file:
         out_file.write(output_text)
 
